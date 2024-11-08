@@ -1,0 +1,79 @@
+-- Enable DBMS_OUTPUT for feedback
+SET SERVEROUTPUT ON;
+
+-- Drop existing tables to avoid conflicts
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE ORDER_DETAILS CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table ORDER_DETAILS dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table ORDER_DETAILS: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE CUSTOMER_ORDER CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table CUSTOMER_ORDER dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table CUSTOMER_ORDER: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE INVENTORY_TRANSFER CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table INVENTORY_TRANSFER dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table INVENTORY_TRANSFER: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE WAREHOUSE_PRODUCT CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table WAREHOUSE_PRODUCT dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table WAREHOUSE_PRODUCT: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE SUPPLIER_PRODUCT CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table SUPPLIER_PRODUCT dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table SUPPLIER_PRODUCT: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE CUSTOMER CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table CUSTOMER dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table CUSTOMER: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE WAREHOUSE CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table WAREHOUSE dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table WAREHOUSE: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE PRODUCT CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table PRODUCT dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table PRODUCT: ' || SQLERRM);
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP TABLE SUPPLIER CASCADE CONSTRAINTS';
+        DBMS_OUTPUT.PUT_LINE('Table SUPPLIER dropped successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping table SUPPLIER: ' || SQLERRM);
+    END;
+END;
+/
+
