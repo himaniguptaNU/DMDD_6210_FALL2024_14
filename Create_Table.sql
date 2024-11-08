@@ -96,7 +96,23 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('Error creating table SUPPLIER: ' || SQLERRM);
     END;
 
-
+  -- Product Table
+    BEGIN
+        EXECUTE IMMEDIATE '
+        CREATE TABLE Product (
+            product_id NUMBER PRIMARY KEY,
+            name VARCHAR2(100) NOT NULL UNIQUE,
+            description VARCHAR2(200),
+            category VARCHAR2(50) NOT NULL,
+            price NUMBER(10, 2) CHECK (price > 0),
+            weight NUMBER(5, 2) CHECK (weight > 0),
+            dimensions VARCHAR2(20) NOT NULL
+        )';
+        DBMS_OUTPUT.PUT_LINE('Table PRODUCT created successfully.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error creating table PRODUCT: ' || SQLERRM);
+    END;
     -- Warehouse Table
     BEGIN
         EXECUTE IMMEDIATE '
