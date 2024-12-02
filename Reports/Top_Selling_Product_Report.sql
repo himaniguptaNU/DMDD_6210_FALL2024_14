@@ -1,9 +1,8 @@
---Top-Selling Products Report
+-- This report is to generate top 2 most sold products 
 SELECT 
     od.product_id,
     p.name AS product_name,
-    SUM(od.quantity) AS total_quantity_sold,
-    SUM(od.quantity * od.unit_price) AS total_revenue
+    SUM(od.quantity) AS total_quantity_sold
 FROM 
     Order_Details od
 JOIN 
@@ -11,7 +10,6 @@ JOIN
 GROUP BY 
     od.product_id, p.name
 ORDER BY 
-    total_quantity_sold DESC;
-    
-
+    total_quantity_sold DESC
+FETCH FIRST 2 ROWS ONLY;
 
