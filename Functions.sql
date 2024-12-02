@@ -32,3 +32,23 @@ EXCEPTION
         RETURN NULL; -- Returns NULL if no warehouse has sufficient stock
 END;
 /
+
+
+--This function retrieves the current stock level in warehouse
+CREATE OR REPLACE FUNCTION GetCurrentStock (
+    p_product_id IN NUMBER,
+    p_warehouse_id IN NUMBER
+) RETURN NUMBER IS
+    v_quantity NUMBER;
+BEGIN
+    SELECT quantity_in_stock
+    INTO v_quantity
+    FROM Warehouse_Product
+    WHERE product_id = p_product_id AND warehouse_id = p_warehouse_id;
+
+    RETURN v_quantity;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL; -- Return NULL if no record exists
+END;
+/
