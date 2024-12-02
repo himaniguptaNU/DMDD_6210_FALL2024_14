@@ -251,13 +251,3 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Supplier_Product records inserted.');
 END;
 /
-
-select* from supplier; 
-select* from product;
-select* from warehouse;
-select* from customer;
-select * from Warehouse_Product;
-select* from INVENTORY_TRANSFER;
-select * from CUSTOMER_ORDER;
-select * from ORDER_DETAILS;
-select* from SUPPLIER_PRODUCT;
