@@ -52,3 +52,20 @@ EXCEPTION
         RETURN NULL; -- Return NULL if no record exists
 END;
 /
+
+
+--This function checks if a product is there in warehouse
+CREATE OR REPLACE FUNCTION IsProductInWarehouse (
+    p_product_id IN NUMBER,
+    p_warehouse_id IN NUMBER
+) RETURN BOOLEAN IS
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Warehouse_Product
+    WHERE product_id = p_product_id AND warehouse_id = p_warehouse_id;
+
+    RETURN v_count > 0;
+END;
+/
