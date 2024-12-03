@@ -133,5 +133,65 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('Error creating Customer_Order_Details_View: ' || SQLERRM);
     END;
 
+    --list of products that require reordering based on current stock levels across warehouses, highlighting the most critical shortages.
+BEGIN
+    EXECUTE IMMEDIATE '
+    CREATE OR REPLACE VIEW Stock_Reorder_View AS
+    SELECT 
+    p.name AS product_name,
+    w.location AS warehouse_location,
+    wp.quantity_in_stock,
+    wp.reorder_level,
+    (wp.reorder_level - wp.quantity_in_stock) AS quantity_to_reorder,
+    s.name AS preferred_supplier,
+    sp.price AS supplier_price,
+    sp.lead_time AS supplier_lead_time
+FROM 
+    Warehouse_Product wp
+JOIN 
+    Product p ON wp.product_id = p.product_id
+JOIN 
+    Warehouse w ON wp.warehouse_id = w.warehouse_id
+LEFT JOIN 
+    Supplier_Product sp ON wp.product_id = sp.product_id
+LEFT JOIN 
+    Supplier s ON sp.supplier_id = s.supplier_id
+WHERE 
+    wp.quantity_in_stock < wp.reorder_level
+ORDER BY 
+    quantity_to_reorder DESC, supplier_lead_time ASC';
+        
+    DBMS_OUTPUT.PUT_LINE('Stock_Reorder_View created successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error creating Stock_Reorder_View: ' || SQLERRM);
+END;
+
+
+--Product Demand vs. Stock Availability
+BEGIN
+    EXECUTE IMMEDIATE '
+    CREATE OR REPLACE VIEW Product_Stock_Gap_View AS
+    SELECT 
+        p.name AS product_name, 
+        SUM(od.quantity) AS total_demand, 
+        wp.quantity_in_stock AS available_stock,
+        (SUM(od.quantity) - wp.quantity_in_stock) AS stock_gap
+    FROM 
+        Order_Details od
+    JOIN 
+        Product p ON od.product_id = p.product_id
+    JOIN 
+        Warehouse_Product wp ON p.product_id = wp.product_id
+    GROUP BY 
+        p.name, wp.quantity_in_stock
+    ORDER BY 
+        stock_gap DESC';
+    DBMS_OUTPUT.PUT_LINE('Product_Stock_Gap_View created successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error creating Product_Stock_Gap_View: ' || SQLERRM);
+END;
+
 END;
 /
