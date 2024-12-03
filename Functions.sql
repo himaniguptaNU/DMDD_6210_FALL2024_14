@@ -33,6 +33,24 @@ EXCEPTION
 END;
 /
 
+-- This function checks the stock level and return Low or Sufficient based on reorder_level
+CREATE OR REPLACE FUNCTION CheckStockStatus (
+    p_product_id IN NUMBER,
+    p_warehouse_id IN NUMBER
+) RETURN VARCHAR2 IS
+    v_status VARCHAR2(20);
+BEGIN
+    SELECT CASE 
+               WHEN quantity_in_stock <= reorder_level THEN 'Low'
+               ELSE 'Sufficient'
+           END
+    INTO v_status
+    FROM Warehouse_Product
+    WHERE product_id = p_product_id AND warehouse_id = p_warehouse_id;
+
+    RETURN v_status;
+END;
+/
 
 --This function retrieves the current stock level in warehouse
 CREATE OR REPLACE FUNCTION GetCurrentStock (
