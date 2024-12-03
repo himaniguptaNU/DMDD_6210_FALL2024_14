@@ -87,3 +87,19 @@ BEGIN
     RETURN v_count > 0;
 END;
 /
+
+CREATE OR REPLACE FUNCTION ValidateUserAccess (
+    p_package_name IN VARCHAR2
+) RETURN BOOLEAN IS
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM user_tab_privs
+    WHERE grantee = USER
+          AND privilege = 'EXECUTE'
+          AND table_name = UPPER(p_package_name);
+
+    RETURN v_count > 0;
+END;
+/
