@@ -44,4 +44,28 @@ BEGIN
 END;
 /
 
+--trigger to ensure the quantity in order details cannot exceed quantity in stock
+SET SERVEROUTPUT ON;
 
+CREATE OR REPLACE TRIGGER trg_validate_order_quantity
+BEFORE INSERT OR UPDATE ON Order_Details
+FOR EACH ROW
+DECLARE
+    v_quantity_in_stock NUMBER;
+BEGIN
+    -- Fetch the current quantity in stock for the product
+    SELECT quantity_in_stock
+    INTO v_quantity_in_stock
+    FROM Warehouse_Product
+    WHERE product_id = :NEW.product_id;
+
+    -- Check if the new order quantity exceeds available stock
+    IF :NEW.quantity > v_quantity_in_stock THEN
+        DBMS_OUTPUT.PUT_LINE('Stock not available for Product ID ' || :NEW.product_id || 
+                             '. Remaining stock is ' || v_quantity_in_stock || '.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Order placed successfully for Product ID ' || :NEW.product_id || 
+                             '. Remaining stock is sufficient.');
+    END IF;
+END;
+/
