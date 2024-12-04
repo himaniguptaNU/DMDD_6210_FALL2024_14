@@ -11,6 +11,9 @@ BEGIN
                              '. Current stock is ' || :NEW.quantity_in_stock ||
                              '. Please place an order with the supplier.');
     END IF;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error in trg_notify_low_stock: ' || SQLERRM);
 END;
 /
 
@@ -41,6 +44,9 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('Transfer ID: ' || :NEW.transfer_id || 
                              ' has sufficient stock. Status set to "Stock Available".');
     END IF;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error in trg_update_inventory_transfer_status: ' || SQLERRM);
 END;
 /
 
@@ -67,5 +73,14 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('Order placed successfully for Product ID ' || :NEW.product_id || 
                              '. Remaining stock is sufficient.');
     END IF;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('Product ID ' || :NEW.product_id || ' not found in stock.');
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error in trg_validate_order_quantity: ' || SQLERRM);
 END;
 /
+
+UPDATE Warehouse_Product
+SET quantity_in_stock = 5
+WHERE product_id = 2000; -- Adjust `product_id` as per your data
