@@ -82,7 +82,3 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('Error in trg_validate_order_quantity: ' || SQLERRM);
 END;
 /
-
-UPDATE Warehouse_Product
-SET quantity_in_stock = 5
-WHERE product_id = 2000; -- Adjust `product_id` as per your data
