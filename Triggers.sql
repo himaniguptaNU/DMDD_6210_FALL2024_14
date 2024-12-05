@@ -5,15 +5,17 @@ CREATE OR REPLACE TRIGGER trg_notify_low_stock
 AFTER UPDATE OR INSERT ON Warehouse_Product
 FOR EACH ROW
 BEGIN
-    IF :NEW.quantity_in_stock < 10 THEN
+    -- Check if the current stock is below the reorder level
+    IF :NEW.quantity_in_stock < :NEW.reorder_level THEN
         DBMS_OUTPUT.PUT_LINE('Low Stock Alert: Warehouse ID: ' || :NEW.warehouse_id ||
                              ', Product ID: ' || :NEW.product_id ||
                              '. Current stock is ' || :NEW.quantity_in_stock ||
+                             ', Reorder level is ' || :NEW.reorder_level ||
                              '. Please place an order with the supplier.');
     END IF;
-    EXCEPTION
-        WHEN OTHERS THEN
-            DBMS_OUTPUT.PUT_LINE('Error in trg_notify_low_stock: ' || SQLERRM);
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error in trg_notify_low_stock: ' || SQLERRM);
 END;
 /
 
